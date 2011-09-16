@@ -24,7 +24,27 @@ images.
 The documents go into ElasticSearch, tagged appropriately, and storing full
 text. The resources go into the filesystem to be served by the web server.
 
+Document schema
+---------------
+
+[Title]
+Author
+Date
+Link
+Content
+Type
+Source
+Projects
+[Thread]
+
 TODO
 ----
 
-Everything :)
+ * Create index on start
+ * Mail importer
+ * SVN importer
+ * Asset extractor
+ * Project stream view
+ * Project list page (home page)
+ * Mercurial importer
+ * Search interface
