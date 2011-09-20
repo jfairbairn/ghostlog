@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
 
   s.files = `git ls-files`.split("\n")
 
-  %w{thin sinatra em-http-request em-net-http mail mustache}.each do |g| # dalli, em-synchrony, kgio
+  %w{thin sinatra em-http-request em-net-http mail mustache nokogiri}.each do |g| # dalli, em-synchrony, kgio
     s.add_runtime_dependency(g)
   end
 
