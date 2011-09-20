@@ -1,0 +1,15 @@
+{
+  "doc" : {
+    "properties" : {
+			"title" : {"type" : "string", "store" : "yes"},
+			"author" : {"type" : "string", "store" : "yes"},
+			"date" : {"type" : "date", "store" : "yes", "date_format" : ""},
+			"link" : {"type" : "string", "store" : "yes"},
+			"content" : {"type" : "string", "store" : "yes"},
+			"type" : {"type" : "string", "store" : "yes"},
+			"source" : {"type" : "string", "store" : "yes"},
+			"projects" : {"type" : "string", "store" : "yes"},
+			"thread" : {"type" : "string", "store" : "yes"}
+		}				
+	}
+}

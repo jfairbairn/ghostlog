@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require 'ghostlog'
+require 'optparse'
+require 'pp'
+
+options = {config: 'config.yml'}
+OptionParser.new(ARGV) do |opts|
+  opts.on('-c <filename>', 'Config file (default: config.yml)') {|filename| options[:config] = filename}
+  opts.on('-h', 'This help') {puts opts.help ; exit 1}
+end.parse!
+
+config = Ghostlog::Config.new(options[:config])
+
+index = Ghostlog::SearchIndex.new(config)
+puts index.create.body

@@ -27,15 +27,15 @@ text. The resources go into the filesystem to be served by the web server.
 Document schema
 ---------------
 
-[Title]
-Author
-Date
-Link
-Content
-Type
-Source
-Projects
-[Thread]
+ * [Title]
+ * Author
+ * Date
+ * Link
+ * Content
+ * Type
+ * Source
+ * Projects
+ * [Thread]
 
 TODO
 ----
