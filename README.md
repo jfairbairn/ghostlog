@@ -40,11 +40,16 @@ Document schema
 TODO
 ----
 
- * Create index on start
- * Mail importer
  * SVN importer
- * Asset extractor
- * Project stream view
  * Project list page (home page)
+ * UNC / drive link translations
  * Mercurial importer
  * Search interface
+ 
+DONE
+----
+
+ * Create index on start
+ * Mail importer
+ * Asset extractor
+ * Project stream view
