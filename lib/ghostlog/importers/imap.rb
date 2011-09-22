@@ -5,7 +5,10 @@ require 'digest/sha1'
 module Ghostlog
   module Importer
     class IMAP
+      
       attr_reader :config
+      
+      MSGID = /^<(.*)>$/
       
       def initialize(config, index, filestore)
         @config = config
@@ -38,8 +41,6 @@ module Ghostlog
 
           # Save non-text content
 
-          FileUtils.mkdir_p 'mailcontent'
-
           i=0
 
           id2filename = {}
@@ -47,7 +48,7 @@ module Ghostlog
           parts.each do |part|
             if part.content_type !~ /^text\// && part.content_type =~ /\/(\w+)(; )?/
               ext = $1
-              cid = part.content_id.gsub(/^<(.*)>$/, '\1')
+              cid = part.content_id.gsub(/^<(.*)>$/, '\1') if part.content_id
               cid = nil if cid == ''
               content = part.body.decoded
               filename = Digest::SHA1.new.update(content).hexdigest
@@ -63,7 +64,7 @@ module Ghostlog
             date: mail.date,
             type: 'mail',
             source: 'sandpit-mail',
-            projects: config[:projects]
+            tags: config[:tags]
           }
 
           parts.each do |part|
@@ -75,40 +76,21 @@ module Ghostlog
                 html = Nokogiri::HTML(body)
                 id2filename.each do |k,v|
                   html.xpath("//*[@src=\"cid:#{k}\"]").each do |link|
-                    link['src'] = v
+                    link['src'] = "/r/#{v}"
                   end
                 end
-                header = <<-EOF
-                <dl class="mail">
-                  <dt>From:</dt>
-                  <dd>#{(mail.from||[]).join(', ')}</dd>
-
-                  <dt>Date:</dt>
-                  <dd>#{mail.date.rfc822}</dd>
-
-                  <dt>To:</dt>
-                  <dd>#{(mail.to||[]).join(', ')}</dd>
-
-                  <dt>Cc:</dt>
-                  <dd>#{(mail.cc||[]).join(', ')}</dd>
-
-                  <dt>Subject:</dt>
-                  <dd>#{mail.subject}</dd>
-
-                </dl>
-                EOF
-                html.css('body').each do |b|
-                  b.first_element_child.add_previous_sibling(header)
-                end
-
                 body = html.to_html
                 doc[:content] = body
-                @index.put(doc)
+                msgid = mail.message_id
+                msgid.gsub!(MSGID, '\1') if msgid
+                @index.put(doc, msgid)
               end
             end
           end
         end
       end
     end
+    
+    register :imap, IMAP
   end
 end

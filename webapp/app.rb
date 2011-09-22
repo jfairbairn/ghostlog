@@ -2,24 +2,68 @@ require 'bundler'
 Bundler.setup
 require 'sinatra'
 require 'mustache/sinatra'
+require 'ghostlog'
 
+require 'fiber'
+require 'thin'
+require 'ghostlog/web/thin_fiber'
 
-module GhostLog
+module Ghostlog
+  
   module Views
   end
   
   class App < Sinatra::Base
+    @@config = Config.new(File.expand_path('../config.yml', File.dirname(__FILE__)))
+    @@index = Ghostlog::SearchIndex.new(@@config)
     ROOT = File.dirname(__FILE__)
     register Mustache::Sinatra
     set :mustache, {
       templates: ROOT + '/templates',
       views: ROOT + '/views',
-      namespace: GhostLog
+      namespace: Ghostlog
     }
   
     get '/' do
       mustache :index
     end  
+    
+    get '/projects/:project' do
+      content_type 'text/html'
+      @results = @@index.search({
+        fields: '*',
+        query: {
+          filtered: {
+            query: {match_all:{}},
+            filter: {
+              term: {tags: params[:project]},
+              limit: 100
+            },
+            from: 0,
+            size: 50,
+            sort: [
+              {date: {order: 'desc'}},'_score'
+            ]
+          }
+        }
+      })
+      @title = params[:project].capitalize
+      mustache :search_results
+    end
+    
+    get '/projects/:project/debug' do
+      content_type 'text/plain'
+      @@index.search(term: {tags: params[:project]}).to_json
+    end
+    
+    get '/r/:hash' do
+      p params[:hash][0..1]
+      p params[:hash][2..3]
+      p @@config[:filestore]
+      filepath = File.expand_path(params[:hash], File.join(File.dirname(__FILE__), '..', @@config[:filestore][:directory], params[:hash][0..1], params[:hash][2..3]))
+      content_type JSON.parse(File.read(filepath + '.meta'))['type']
+      send_file(filepath, :disposition => 'inline')
+    end
   end
 end
 

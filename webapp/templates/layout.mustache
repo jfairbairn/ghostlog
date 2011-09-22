@@ -1,5 +1,55 @@
 <html>
+  <head>
+    <style type="text/css">
+      body {
+        background-color: #eee;
+        font-family: sans-serif;
+        width: 100%;
+        position: relative;
+      }
+      
+      .result {
+        background-color: white;
+        border-radius: 0.5em;
+        padding: 0.5em;
+        margin-bottom: 1em;
+      }
+      .meta {
+        font-size: 70%;
+        margin-bottom: 1em;
+      }
+
+      #content {
+        margin-right: 23em;
+      }
+      
+      h2 {
+        margin-top: 0.25em;
+      }
+      
+      #sidebar {
+        width: 20em;
+        height: 100%;
+        background: rgb(18%, 18%, 18%);
+        color: white;
+        padding: 1em;
+        border-radius: 0.5em;
+        position: absolute;
+        right: 0px;
+      }
+      
+    </style>
+    {{#title}}
+    <title>{{to_s}}</title>
+    {{/title}}
+  </head>
   <body>
+    {{#title}}
+    <h1>{{title}}</h1>
+    {{/title}}
+    <div id="sidebar">the side</div>
+    <div id="content">
     {{{yield}}}
+    </div>
   </body>
 </html>

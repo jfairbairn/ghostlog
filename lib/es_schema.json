@@ -9,7 +9,7 @@
 			"content" : {"type" : "string", "store" : "yes"},
 			"type" : {"type" : "string", "store" : "yes"},
 			"source" : {"type" : "string", "store" : "yes"},
-			"projects" : {"type" : "string", "store" : "yes"},
+			"tags" : {"type" : "string", "store" : "yes"},
 			"thread" : {"type" : "string", "store" : "yes"}
 		}				
 	}

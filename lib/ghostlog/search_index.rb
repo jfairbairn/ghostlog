@@ -1,6 +1,7 @@
 require File.dirname(__FILE__) + '/http_client'
 require 'cgi'
 require 'json'
+require 'pp'
 
 module Ghostlog
   class SearchIndex
@@ -15,13 +16,22 @@ module Ghostlog
       @client.put("/#{@index}/document/_mapping", schema_json)
     end
     
-    def put(doc, id=nil)
-      @client.post("/#{@index}/document/", doc.to_json)
+    def delete
+      @client.delete("/#{@index}/")
     end
     
-    def search(qstr)
-      qstr_escaped = CGI.escape(qstr)
-      JSON.parse(@client.get("/#{@index}/document/_search?q=#{qstr_escaped}").body)
+    def put(doc, id=nil)
+      @client.put("/#{@index}/document/#{id}", doc.to_json)
+    end
+    
+    def search(params={})
+      res = JSON.parse(@client.post("/#{@index}/document/_search", params.to_json).body)
+      raise "Query error: #{res['error']}" if res.has_key?('error')
+      res
+    end
+    
+    def get(id)
+      JSON.parse(@client.get("/#{@index}/document/#{id}?fields=content").body)
     end
     
     private
