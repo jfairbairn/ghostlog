@@ -26,7 +26,7 @@ class SearchResult < Layout
   def author
     a = @doc['fields']['author']
     a = $1 if a =~ MM_EMAIL
-    a  
+    a.downcase  
   end
   
   def to_json(*args)
