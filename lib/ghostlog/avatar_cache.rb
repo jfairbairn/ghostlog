@@ -1,5 +1,7 @@
-require 'json'
+require 'uri'
 require 'net/http'
+
+require 'json'
 
 module Ghostlog
   class AvatarCache
@@ -8,9 +10,11 @@ module Ghostlog
       populate unless @cache
       result = @cache[username]
       if result.nil?
-        result = fetch(username)
+        result = fetch(username)[0]
         if result.nil?
           result = :not_found
+        else
+          result = qualify(result['small'])
         end
         @cache[username] = result
       end
@@ -24,8 +28,14 @@ module Ghostlog
     def populate
       @cache = {}
       fetch.each do |user|
-        @cache[user['username']] = user['small']
+        @cache[user['username']] = qualify(user['small'])
       end
+    end
+    
+    def qualify(uri)
+      u = URI.parse(uri)
+      u.host += '.medmol.local' if u.host == 'intranet'
+      u.to_s
     end
     
     def fetch(username=nil)
@@ -38,7 +48,11 @@ module Ghostlog
       raise "Bad response #{res.code} - #{res.body}" unless res.code == '200'
       body = res.body
       body = $1 if body =~ CALLBACK
-      JSON.parse(body)
+      begin
+        JSON.parse(body)
+      rescue
+        []
+      end
     end
   end
 end

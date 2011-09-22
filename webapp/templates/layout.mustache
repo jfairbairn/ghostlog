@@ -18,7 +18,7 @@
       .result {
         background-color: white;
         border-radius: 0.5em;
-        box-shadow: 1px 1px 3px rgb(18%, 18%, 18%);
+        box-shadow: 1px 1px 3px rgb(82%, 82%, 82%);
         padding: 0.5em;
         margin-bottom: 1em;
       }
@@ -29,6 +29,7 @@
       }
       
       .author {
+        display: block;
         background: #f39;
         vertical-align: middle;
         padding: 0.25em 1em;
@@ -39,9 +40,20 @@
         margin-bottom: 0.5em;
         text-shadow: 1px 1px 1px #603;
         box-shadow: 1px 1px 1px #906;
-      }
-      
-      .author a {
+        
+        background-image: linear-gradient(bottom, #C242A4 40%, #D680C3 70%);
+        background-image: -o-linear-gradient(bottom, #C242A4 40%, #D680C3 70%);
+        background-image: -moz-linear-gradient(bottom, #C242A4 40%, #D680C3 70%);
+        background-image: -webkit-linear-gradient(bottom, #C242A4 40%, #D680C3 70%);
+        background-image: -ms-linear-gradient(bottom, #C242A4 40%, #D680C3 70%);
+
+        background-image: -webkit-gradient(
+        	linear,
+        	left bottom,
+        	left top,
+        	color-stop(0.4, #C242A4),
+        	color-stop(0.7, #D680C3)
+        );
         color: white !important;
         text-decoration: none !important;
       }
@@ -65,7 +77,7 @@
       #sidebar {
         width: 20em;
         height: 100%;
-        background: rgb(18%, 18%, 18%);
+        background: rgb(82%, 82%, 82%);
         color: white;
         padding: 1em;
         border-radius: 0.5em;

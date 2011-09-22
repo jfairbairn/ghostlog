@@ -38,22 +38,44 @@ module Ghostlog
       @avatars = @@avatars
       @results = @@index.search({
         fields: '*',
+        from: 0,
+        size: 50,
+        sort: [
+          {date: {order: 'desc'}},'_score'
+        ],
         query: {
           filtered: {
             query: {match_all:{}},
             filter: {
-              term: {tags: params[:project]},
-              limit: 100
-            },
-            from: 0,
-            size: 50,
-            sort: [
-              {date: {order: 'desc'}},'_score'
-            ]
+              term: {tags: params[:project]}
+            }
           }
         }
       })
       @title = params[:project].capitalize
+      mustache :search_results
+    end
+    
+    get '/by/:author' do
+      content_type 'text/html'
+      @avatars = @@avatars
+      @results = @@index.search({
+        fields: '*',
+        from: 0,
+        size: 50,
+        sort: [
+          {date: {order: 'desc'}},'_score'
+        ],
+        query: {
+          filtered: {
+            query: {match_all:{}},
+            filter: {
+              term: {author: params[:author]}
+            }
+          }
+        }
+      })
+      @title = params[:author].capitalize
       mustache :search_results
     end
     
