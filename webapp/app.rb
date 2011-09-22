@@ -25,6 +25,8 @@ module Ghostlog
     }
   
     get '/' do
+      @tags = @@config[:sources].values.map{|s|s[:tags]}.flatten.uniq.sort
+      @title = 'Ghostlog FTW'
       mustache :index
     end  
     
@@ -57,9 +59,6 @@ module Ghostlog
     end
     
     get '/r/:hash' do
-      p params[:hash][0..1]
-      p params[:hash][2..3]
-      p @@config[:filestore]
       filepath = File.expand_path(params[:hash], File.join(File.dirname(__FILE__), '..', @@config[:filestore][:directory], params[:hash][0..1], params[:hash][2..3]))
       content_type JSON.parse(File.read(filepath + '.meta'))['type']
       send_file(filepath, :disposition => 'inline')

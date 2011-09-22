@@ -27,7 +27,7 @@ module Ghostlog
             :enable_ssl => true
           }
         end
-        mails = Mail.find(mailbox: config[:folder], what: :last, count: 10) do |mail|
+        mails = Mail.find(mailbox: config[:folder], what: :last, count: 1000) do |mail|
           parts = []
           todo = [mail]
 

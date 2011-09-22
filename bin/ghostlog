@@ -15,4 +15,6 @@ config = Ghostlog::Config.new(options[:config])
 index = Ghostlog::SearchIndex.new(config)
 index.create
 filestore = Ghostlog::FileStore.new(config[:filestore])
-Ghostlog::Importer::IMAP.new(config[:sources][:"sandpit-mail"], index, filestore).import
+config[:sources].each do |name, source|
+  Ghostlog::Importer.send(source[:type].to_s, source, index, filestore).import
+end

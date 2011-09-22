@@ -1,6 +1,7 @@
-class Index < Mustache
-  def thingy
-    'bob'
-  end
+class Index < Layout
+  attr_accessor :tags
   
+  def homelink
+    false
+  end
 end
