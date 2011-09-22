@@ -16,6 +16,9 @@ module Ghostlog
   class App < Sinatra::Base
     @@config = Config.new(File.expand_path('../config.yml', File.dirname(__FILE__)))
     @@index = Ghostlog::SearchIndex.new(@@config)
+    
+    @@avatars = Ghostlog::AvatarCache.new
+    
     ROOT = File.dirname(__FILE__)
     register Mustache::Sinatra
     set :mustache, {
@@ -32,6 +35,7 @@ module Ghostlog
     
     get '/projects/:project' do
       content_type 'text/html'
+      @avatars = @@avatars
       @results = @@index.search({
         fields: '*',
         query: {

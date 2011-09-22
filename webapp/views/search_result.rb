@@ -1,7 +1,9 @@
 require 'nokogiri'
 
-class SearchResult < Mustache
+class SearchResult < Layout
   attr_accessor :doc
+  attr_writer :avatars
+  
   def content
     html = Nokogiri.HTML(@doc['fields']['content'])
     style = html.css('style')
@@ -34,4 +36,9 @@ class SearchResult < Mustache
   def date
     Time.parse(@doc['fields']['date'])
   end
+  
+  def avatar
+    avatars ? avatars.get(author) : nil
+  end
+  
 end
